@@ -49,23 +49,23 @@ Usage
 To add domain names, POST a JSON array:
 
 ```bash
-curl -X POST {{ url_for('collection', _external=True ) }} -H "Authorization: secret_api_key" -d '[ "example.com", "example2.com" ]'
+curl -X POST http://your-domain.com/domain -H "Authorization: secret_api_key" -d '[ "example.com", "example2.com" ]'
 ```
 
 To list all domain names, GET the list:
 
 ```bash
-curl -X GET {{ url_for('collection', _external=True ) }} -H "Authorization: secret_api_key"
+curl -X GET http://your-domain.com/domain -H "Authorization: secret_api_key"
 ```
 
 To list a single domain name, GET it:
 
 ```bash
-curl -X GET {{ url_for('member', domain="example.com", _external=True ) }} -H "Authorization: secret_api_key"
+curl -X GET http://your-domain.com/domain/example.com -H "Authorization: secret_api_key"
 ```
 
 To delete a domain name, DELETE it:
 
 ```bash
-curl -X DELETE {{ url_for('member', domain="example.com", _external=True ) }} -H "Authorization: secret_api_key"
+curl -X DELETE http://your-domain.com/domain/example.com -H "Authorization: secret_api_key"
 ```
