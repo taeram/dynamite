@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% set has_jumbotron = true %}
+
+{% block title %}Hello!{% endblock %}
+
+{% block body %}
+    <div class="jumbotron">
+        <h1>Dynamite</h1>
+        <a href="https://github.com/taeram/dynamite">Dynamite</a> is a Python
+        powered Domain Name Monitoring service.
+    </div>
+
+    <div class="container">
+        <p>
+            To add domain names, POST a JSON array:
+
+            <pre>curl -X POST {{ url_for('collection', _external=True ) }} -H "Authorization: secret_api_key" -d '[ "example.com", "example2.com" ]'</pre>
+        </p>
+
+        <p>
+            To list all domain names, GET the list:
+
+            <pre>curl -X GET {{ url_for('collection', _external=True ) }} -H "Authorization: secret_api_key"</pre>
+        </p>
+
+        <p>
+            To list a single domain name, GET it:
+
+            <pre>curl -X GET {{ url_for('member', domain="example.com", _external=True ) }} -H "Authorization: secret_api_key"</pre>
+        </p>
+
+        <p>
+            To delete a domain name, DELETE it:
+
+            <pre>curl -X DELETE {{ url_for('member', domain="example.com", _external=True ) }} -H "Authorization: secret_api_key"</pre>
+        </p>
+    </div>
+
+    <div style="text-align: center">
+        <small>
+            Source available on
+            <a href="https://github.com/taeram/dynamite",target="_blank"><span class="fa fa-github-alt"></span> GitHub</a>
+        </small>
+    </div>
+{% endblock %}
