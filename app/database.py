@@ -20,7 +20,7 @@ class Whois(db.Model):
         self.value = value
 
     def __repr__(self):
-        return "<Whois ('%r', '%r')>" % (self.domain, self.value)
+        return "<Whois (id='%r', domain='%r', created='%r', value=%r)>" % (self.id, self.domain, self.created.strftime('%Y-%m-%d %H:%M:%S'), self.value)
 
     def toObject(self):
         return {
@@ -44,7 +44,7 @@ class Domain(db.Model):
         self.name = name
 
     def __repr__(self):
-        return "<Domain '%r'>" % self.name
+        return "<Domain (id='%r', name='%r', whois_id='%r', created=%r)>" % (self.id, self.name, self.whois_id, self.created.strftime('%Y-%m-%d %H:%M:%S'))
 
     def toObject(self):
         return {

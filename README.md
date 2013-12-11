@@ -19,9 +19,10 @@ Setup
     git clone https://github.com/taeram/dynamite.git
     cd ./dynamite/
 
-    # Create your Heroku app, and add a database addon
+    # Create your Heroku app, and the addons
     heroku apps:create
     heroku addons:add heroku-postgresql
+    heroku addons:add mailgun
 
     # Promote your postgres database (your URL name may differ)
     heroku pg:promote HEROKU_POSTGRESQL_RED_URL

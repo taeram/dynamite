@@ -5,7 +5,8 @@ from flask import render_template, \
                   send_from_directory
 from helpers import is_authenticated, \
                     find_domain, \
-                    find_all_domains
+                    find_all_domains, \
+                    find_whois
 from database import db, \
                      Domain
 import json
@@ -58,8 +59,14 @@ def member(domain):
     if not row:
         return app.response_class(response='{"error": "Not found"}' % domain, mimetype='application/json', status=404)
 
+    response = {
+        "id": row.id,
+        "name": row.name,
+        "whois": find_whois(row.whois_id)
+    }
+
     if request.method == 'DELETE':
         db.session.delete(row)
         db.session.commit()
 
-    return app.response_class(response=json.dumps(row.toObject()), mimetype='application/json')
+    return app.response_class(response=json.dumps(response), mimetype='application/json')

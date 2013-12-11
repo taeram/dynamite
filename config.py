@@ -1,17 +1,26 @@
 from os import getenv
 
 class Config(object):
-    DEBUG = False
-    TESTING = False
-    SQLALCHEMY_DATABASE_URI = getenv('DATABASE_URL')
-    STRIP_WWW_PREFIX = True
     API_KEY = getenv('API_KEY')
+    DAEMON_SLEEP_INTERVAL = 6 # hours
+    MAIL_DEFAULT_SENDER = getenv('SENDER_EMAIL', 'dynamite@example.com')
+    MAIL_PASSWORD = getenv('MAILGUN_SMTP_PASSWORD', None)
+    MAIL_PORT = getenv('MAILGUN_SMTP_PORT', 25)
+    MAIL_SERVER = getenv('MAILGUN_SMTP_SERVER', 'localhost')
+    MAIL_USERNAME = getenv('MAILGUN_SMTP_LOGIN', None)
+    NOTIFY_EMAIL = getenv('NOTIFY_EMAIL', 'dynamite@example.com')
+    SQLALCHEMY_DATABASE_URI = getenv('DATABASE_URL')
 
 class ProductionConfig(Config):
     DEBUG = False
+    MAIL_DEBUG = False
+    MAIL_USE_SSL = True
+    TESTING = False
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    MAIL_DEBUG = True
+    MAIL_USE_SSL = False
 
 class TestingConfig(Config):
     TESTING = True
