@@ -23,7 +23,7 @@ def find_all_domains():
                      order_by(Domain.name).\
                      all()
 
-def find_domain(domain, include_whois=False):
+def find_domain(domain):
     domain = domain.strip()
     if not is_valid_domain(domain):
         raise ValueError("Invalid domain: %s" % domain)
