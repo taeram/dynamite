@@ -32,6 +32,9 @@ with app.app_context():
             # Filter the whois info for .ca domains
             whois_fresh = re.sub(r'(%.*)\n', '', whois_fresh, flags=re.MULTILINE)
 
+            # Filter the whois info for .com domains
+            whois_fresh = re.sub(r'(>>>.*)\n', '', whois_fresh, flags=re.MULTILINE)
+
             if whois is None:
                 print "Saving new whois information for %s" % domain.name
                 # No previous whois found, so just save it
