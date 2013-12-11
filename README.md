@@ -70,3 +70,17 @@ To delete a domain name, DELETE it:
 ```bash
 curl -X DELETE http://your-domain.com/domain/example.com -H "Authorization: secret_api_key"
 ```
+
+Notifications
+=============
+
+When the WHOIS record for a domain has changed, Dynamite will email you a diff of the changes at your NOTIFY_EMAIL address:
+
+```
+example.com changes:
+--- old-whois.txt
++++ new-whois.txt
+@@ -216,15 +216,6 @@
+-  Expiration Date: 21-nov-2013
++  Expiration Date: 21-nov-2014
+```
