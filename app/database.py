@@ -1,8 +1,28 @@
 from app import app
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.script import Manager, prompt_bool
 from datetime import datetime
 
 db = SQLAlchemy(app)
+
+manager = Manager(usage="Manage the database")
+
+@manager.command
+def create():
+    "Create the database"
+    db.create_all()
+
+@manager.command
+def drop():
+    "Empty the database"
+    if prompt_bool("Are you sure you want to drop all tables from the database?"):
+        db.drop_all()
+
+@manager.command
+def recreate():
+    "Recreate the database"
+    drop()
+    create()
 
 class Whois(db.Model):
     """ A history of whois lookups
@@ -51,5 +71,3 @@ class Domain(db.Model):
             "name": self.name,
             "created": self.created.strftime('%Y-%m-%d %H:%M:%S')
         }
-
-db.create_all()
