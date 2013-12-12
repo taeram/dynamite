@@ -12,6 +12,7 @@
     </div>
 
     <div class="container">
+        <h2>Managing Domain Names</h2>
         <p>
             To add domain names, POST a JSON array:
 
@@ -35,6 +36,17 @@
 
             <pre>curl -X DELETE {{ url_for('member', domain="example.com", _external=True ) }} -H "Authorization: secret_api_key"</pre>
         </p>
+        
+        <h2>Notifications</h2>
+        When the WHOIS record for a domain changes, Dynamite will email you a diff of the changes using your <code>NOTIFY_EMAIL</code> address:
+<pre>
+example.com changes:
+--- old-whois.txt
++++ new-whois.txt
+@@ -216,15 +216,6 @@
+-  Expiration Date: 21-nov-2013
++  Expiration Date: 21-nov-2014
+</pre>
     </div>
 
     <div style="text-align: center">
