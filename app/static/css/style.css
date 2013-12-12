@@ -20,3 +20,8 @@ body {
 a {
     color: #BC1818;
 }
+
+.navbar-default .navbar-brand:hover,
+a:hover {
+    color: #F01A1A;
+}
