@@ -22,7 +22,7 @@ def hello():
 @app.route('/domain', methods=['GET', 'POST'])
 def collection():
     if not is_authenticated():
-        return app.response_class(response='{"error": "Invalid API key"}' % request.headers['Authorization'], mimetype='application/json', status=403)
+        return app.response_class(response='{"error": "Invalid API key"}', mimetype='application/json', status=403)
 
     if request.method == 'POST':
         try:

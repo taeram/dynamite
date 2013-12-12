@@ -7,16 +7,39 @@ Requirements
 ============
 You'll need the following:
 
-* A [Heroku](https://www.heroku.com/) account
+* A [Heroku](https://www.heroku.com/) account, if you want to deploy to Heroku.
 * [Python 2.7.3](http://www.python.org/)
 * [pip](https://github.com/pypa/pip)
 * [Virtualenv](https://github.com/pypa/virtualenv)
 
 Setup
 =====
+Local development setup:
 ```bash
     # Clone the repo
     git clone https://github.com/taeram/dynamite.git
+
+    cd ./dynamite/
+
+    # Setup and activate virtualenv
+    virtualenv .venv
+    source ./.venv/bin/activate
+
+    # Install the pip requirements
+    pip install -r requirements.txt
+
+    # Create the development database (SQLite by default)
+    python manage.py database create
+
+    # Start the application, prefixing with the required environment variables
+    NOTIFY_EMAIL="you@example.com" API_KEY="secret_api_key" python app.py
+```
+
+Heroku setup:
+```bash
+    # Clone the repo
+    git clone https://github.com/taeram/dynamite.git
+
     cd ./dynamite/
 
     # Create your Heroku app, and the addons
@@ -27,21 +50,20 @@ Setup
     # Promote your postgres database (your URL name may differ)
     heroku pg:promote HEROKU_POSTGRESQL_RED_URL
 
-    # Setup and activate virtualenv
-    virtualenv .venv
-    source ./.venv/bin/activate
-
-    # Install the pip requirements
-    pip install -r requirements.txt
-
     # Set an "API key" for authorization
     heroku config:set API_KEY="secret_api_key"
 
     # Set your notification email
     heroku config:set NOTIFY_EMAIL="taeram@example.com"
 
-    # Start the application
-    python app.py
+    # Set the flask environment
+    heroku config:set FLASK_ENV=production
+
+    # Create the production database
+    heroku run python manage.py database create
+
+    # Push to Heroku
+    git push heroku master
 ```
 
 Usage
