@@ -1,0 +1,22 @@
+body {
+    color: #502C2C;
+}
+
+.navbar-default {
+    background-color: #502C2C;
+    border-color: #3B2020;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    background-color: #2F1A1A;
+}
+
+.jumbotron, pre {
+    background-color: #F1ECEC;
+}
+
+a {
+    color: #BC1818;
+}
