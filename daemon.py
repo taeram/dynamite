@@ -34,6 +34,8 @@ with app.app_context():
 
             # Filter the whois info for .com domains
             whois_fresh = re.sub(r'(>>>.*)\n', '', whois_fresh, flags=re.MULTILINE)
+            whois_fresh = re.sub(r'(^Timestamp:.*)\n', '', whois_fresh, flags=re.MULTILINE)
+            whois_fresh = re.sub(r'(^Cached on:.*)\n', '', whois_fresh, flags=re.MULTILINE)
 
             if whois is None:
                 print "Saving new whois information for %s" % domain.name
