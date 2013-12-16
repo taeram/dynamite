@@ -9,7 +9,7 @@ class Config(object):
     MAIL_PORT = getenv('MAILGUN_SMTP_PORT', 25)
     MAIL_SERVER = getenv('MAILGUN_SMTP_SERVER', 'localhost')
     MAIL_USERNAME = getenv('MAILGUN_SMTP_LOGIN', None)
-    MAIL_USE_SSL = True
+    MAIL_USE_SSL = False
     NOTIFY_EMAIL = getenv('NOTIFY_EMAIL', 'dynamite@example.com')
     SQLALCHEMY_DATABASE_URI = getenv('DATABASE_URL')
 
@@ -20,7 +20,6 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     DEBUG = True
     MAIL_DEBUG = True
-    MAIL_USE_SSL = False
     SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'
 
 class TestingConfig(Config):
