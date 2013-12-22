@@ -29,6 +29,9 @@ with app.app_context():
             # Lookup the current whois
             whois_fresh = get_whois(domain.name)[0]
 
+            # Strip \r returns
+            whois_fresh = re.sub(r'\r', '', whois_fresh, flags=re.MULTILINE)
+
             # Filter the whois info for .ca domains
             whois_fresh = re.sub(r'(%.*)\n', '', whois_fresh, flags=re.MULTILINE)
 
@@ -47,7 +50,7 @@ with app.app_context():
                 print "Whois information has changed for %s" % domain.name
 
                 # Build the email body
-                diff = unified_diff(whois.value.split(), whois_fresh.split(), fromfile="old-whois.txt", tofile="new-whois.txt")
+                diff = unified_diff(whois.value.split('\n'), whois_fresh.split('\n'), fromfile="old-whois.txt", tofile="new-whois.txt")
                 email_body = '<strong>%s changes:</strong><br /><pre>%s</pre>' % (domain.name, "\n".join(diff))
 
                 # If the whois value differs, send an email with the difference
