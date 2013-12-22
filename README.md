@@ -31,8 +31,11 @@ Local development setup:
     # Create the development database (SQLite by default)
     python manage.py database create
 
+    # Start the daemon, prefixing with the required environment variables
+    NOTIFY_EMAIL="you@example.com" python daemon.py
+
     # Start the application, prefixing with the required environment variables
-    NOTIFY_EMAIL="you@example.com" API_KEY="secret_api_key" python app.py
+    API_KEY="secret_api_key" python server.py
 ```
 
 Heroku setup:
