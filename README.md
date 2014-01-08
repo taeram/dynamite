@@ -109,7 +109,3 @@ example.com changes:
 -  Expiration Date: 21-nov-2013
 +  Expiration Date: 21-nov-2014
 ```
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/taeram/dynamite/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
