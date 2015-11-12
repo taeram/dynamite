@@ -1,5 +1,6 @@
 from app import app
 from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy.dialects.mysql import VARCHAR
 from flask.ext.script import Manager, prompt_bool
 from datetime import datetime
 
@@ -56,7 +57,7 @@ class Domain(db.Model):
     __tablename__ = 'domains'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text, unique=True)
+    name = db.Column(VARCHAR(255), unique=True)
     whois_id = db.Column(db.Integer, db.ForeignKey(Whois.id))
     created = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
 
