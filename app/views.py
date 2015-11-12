@@ -8,7 +8,8 @@ from helpers import is_authenticated, \
                     find_all_domains, \
                     find_whois
 from database import db, \
-                     Domain
+                     Domain, \
+                     Whois
 import json
 
 @app.route('/favicon.ico')
@@ -70,3 +71,75 @@ def member(domain):
         db.session.commit()
 
     return app.response_class(response=json.dumps(response), mimetype='application/json')
+
+
+from flask.ext.mail import Mail, Message
+from pythonwhois.net import get_whois_raw as get_whois
+from difflib import unified_diff
+from time import sleep
+import re
+import cgitb
+cgitb.enable()
+
+mail = Mail(app)
+
+@app.route('/daemon', methods=['GET'])
+def daemon():
+    # Get a list of all domains
+    domains = db.session.query(Domain).\
+                         order_by(Domain.name).\
+                         all()
+
+    # Do a whois lookup on each domain
+    for domain in domains:
+        print "*** Processing %s" % domain.name
+
+        # Retrieve the stored whois for this domain
+        whois = db.session.query(Whois).\
+                           filter(Whois.id == domain.whois_id).\
+                           first()
+
+        # Lookup the current whois
+        whois_fresh = get_whois(domain.name)[0]
+
+        # Strip \r returns
+        whois_fresh = re.sub(r'\r', '', whois_fresh, flags=re.MULTILINE)
+
+        # Filter the whois info for .ca domains
+        whois_fresh = re.sub(r'(%.*)\n', '', whois_fresh, flags=re.MULTILINE)
+
+        # Filter the whois info for .com domains
+        whois_fresh = re.sub(r'(>>>.*)\n', '', whois_fresh, flags=re.MULTILINE)
+        whois_fresh = re.sub(r'(^Timestamp:.*)\n', '', whois_fresh, flags=re.MULTILINE)
+        whois_fresh = re.sub(r'(^Cached on:.*)\n', '', whois_fresh, flags=re.MULTILINE)
+
+        if whois is None:
+            print "Saving new whois information for %s" % domain.name
+            # No previous whois found, so just save it
+            whois = Whois(domain=domain.name, value=whois_fresh)
+            db.session.add(whois)
+            db.session.commit()
+        elif whois.value is not None and whois.value != whois_fresh:
+            print "Whois information has changed for %s" % domain.name
+
+            # Build the email body
+            diff = unified_diff(whois.value.split('\n'), whois_fresh.split('\n'), fromfile="old-whois.txt", tofile="new-whois.txt")
+            email_body = '<strong>%s changes:</strong><br /><pre>%s</pre>' % (domain.name, "\n".join(diff))
+
+            # If the whois value differs, send an email with the difference
+            email = Message("%s Domain Name Notification" % domain.name, recipients=[app.config['NOTIFY_EMAIL']], html=email_body)
+            mail.send(email)
+
+            # Save the new whois value
+            whois = Whois(domain=domain.name, value=whois_fresh)
+            db.session.add(whois)
+            db.session.commit()
+
+        # Associate the domain with this whois value
+        if domain.whois_id != whois.id:
+            domain.whois_id = whois.id
+            db.session.add(domain)
+            db.session.commit()
+
+    return app.response_class(response='{"status":"ok"}', mimetype='application/json')
+

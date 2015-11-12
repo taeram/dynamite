@@ -11,7 +11,7 @@ class Config(object):
     MAIL_USERNAME = getenv('MAILGUN_SMTP_LOGIN', None)
     MAIL_USE_SSL = False
     NOTIFY_EMAIL = getenv('NOTIFY_EMAIL', 'dynamite@example.com')
-    SQLALCHEMY_DATABASE_URI = getenv('DATABASE_URL')
+    SQLALCHEMY_DATABASE_URI = getenv('DATABASE_URL').replace('mysql2:', 'mysql:')
 
 class ProductionConfig(Config):
     DEBUG = False
