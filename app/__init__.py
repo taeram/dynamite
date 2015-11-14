@@ -9,4 +9,7 @@ if os.getenv('FLASK_ENV') == 'production':
 else:
     app.config.from_object('config.DevelopmentConfig')
 
+from flask.ext.mail import Mail
+mail = Mail(app)
+
 import views

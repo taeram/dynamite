@@ -1,8 +1,10 @@
-from app import app
+from app import app,
+                mail
 import os
 from flask import render_template, \
                   request, \
                   send_from_directory
+from flask.ext.mail import Message
 from helpers import is_authenticated, \
                     find_domain, \
                     find_all_domains, \
@@ -11,6 +13,9 @@ from database import db, \
                      Domain, \
                      Whois
 import json
+from pythonwhois.net import get_whois_raw as get_whois
+from difflib import unified_diff
+import re
 
 @app.route('/favicon.ico')
 def favicon():
@@ -72,17 +77,6 @@ def member(domain):
 
     return app.response_class(response=json.dumps(response), mimetype='application/json')
 
-
-from flask.ext.mail import Mail, Message
-from pythonwhois.net import get_whois_raw as get_whois
-from difflib import unified_diff
-from time import sleep
-import re
-import cgitb
-cgitb.enable()
-
-mail = Mail(app)
-
 @app.route('/daemon', methods=['GET'])
 def daemon():
     # Get a list of all domains
@@ -92,8 +86,6 @@ def daemon():
 
     # Do a whois lookup on each domain
     for domain in domains:
-        print "*** Processing %s" % domain.name
-
         # Retrieve the stored whois for this domain
         whois = db.session.query(Whois).\
                            filter(Whois.id == domain.whois_id).\
@@ -114,14 +106,11 @@ def daemon():
         whois_fresh = re.sub(r'(^Cached on:.*)\n', '', whois_fresh, flags=re.MULTILINE)
 
         if whois is None:
-            print "Saving new whois information for %s" % domain.name
             # No previous whois found, so just save it
             whois = Whois(domain=domain.name, value=whois_fresh)
             db.session.add(whois)
             db.session.commit()
         elif whois.value is not None and whois.value != whois_fresh:
-            print "Whois information has changed for %s" % domain.name
-
             # Build the email body
             diff = unified_diff(whois.value.split('\n'), whois_fresh.split('\n'), fromfile="old-whois.txt", tofile="new-whois.txt")
             email_body = '<strong>%s changes:</strong><br /><pre>%s</pre>' % (domain.name, "\n".join(diff))
@@ -142,4 +131,3 @@ def daemon():
             db.session.commit()
 
     return app.response_class(response='{"status":"ok"}', mimetype='application/json')
-
