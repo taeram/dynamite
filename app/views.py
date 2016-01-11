@@ -110,7 +110,7 @@ def daemon():
             whois = Whois(domain=domain.name, value=whois_fresh)
             db.session.add(whois)
             db.session.commit()
-        elif whois.value is not None and whois.value != whois_fresh:
+        elif whois_fresh is not None and whois.value != whois_fresh:
             # Build the email body
             diff = unified_diff(whois.value.split('\n'), whois_fresh.split('\n'), fromfile="old-whois.txt", tofile="new-whois.txt")
             email_body = '<strong>%s changes:</strong><br /><pre>%s</pre>' % (domain.name, "\n".join(diff))
