@@ -105,7 +105,7 @@ def daemon():
         whois_fresh = re.sub(r'(^Timestamp:.*)\n', '', whois_fresh, flags=re.MULTILINE)
         whois_fresh = re.sub(r'(^Cached on:.*)\n', '', whois_fresh, flags=re.MULTILINE)
 
-        if whois_fresh is None:
+        if len(whois_fresh.splitlines()) < 10:
             continue
 
         if whois is None:
