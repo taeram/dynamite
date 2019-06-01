@@ -17,10 +17,6 @@ from pythonwhois.net import get_whois_raw as get_whois
 from difflib import unified_diff
 import re
 
-@app.route('/.well-known/acme-challenge/<filename>')
-def letsencrypt(filename):
-    return send_from_directory(os.path.join(app.root_path, '../.well-known/acme-challenge/'), filename)
-
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.png', mimetype='image/png')
