@@ -15,6 +15,10 @@ log_handler = logging.StreamHandler(sys.stdout)
 log_handler.setLevel(logging.WARNING)
 app.logger.addHandler(log_handler)
 
+# Environment
+app.config.from_object('config.Config')
+app.debug = app.config['DEBUG']
+
 from flask.ext.mail import Mail
 mail = Mail(app)
 
